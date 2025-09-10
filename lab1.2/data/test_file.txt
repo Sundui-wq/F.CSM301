@@ -1,0 +1,11 @@
+Hello, World!
+This is a test file.
+We are testing file reading in Python.
+Монгол үсгийн тест: Сайн байна уу?
+1234567890
+Special characters: !@#$%^&*()
+End of file.
+Line with    multiple    spaces
+Line with, commas, and. punctuation!
+Line with unicode: ñáéíóú
+最後の行 (Last line in Japanese)
