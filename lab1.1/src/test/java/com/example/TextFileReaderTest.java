@@ -34,5 +34,6 @@ class TextFileReaderTest {
         assertNotNull(content);
     }
 }
+//bolndoo
 // mvn test -Dtest=TextFileReaderTest -DfilePath="src/test/resources/hooson-file.txt"
 //mvn compile

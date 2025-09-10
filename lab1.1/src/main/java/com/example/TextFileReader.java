@@ -37,5 +37,6 @@ public class TextFileReader {
         }
     }
 }
+
 // mvn compile
 // mvn exec:java -D"exec.mainClass"="com.example.TextFileReader" -D"exec.args"="src/test/resources/test-file.txt"
