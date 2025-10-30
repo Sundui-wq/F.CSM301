@@ -9,9 +9,6 @@ import com.example.api.PathResponse;
 
 import java.util.*;
 
-/**
- * Зам олох үйлчилгээ
- */
 public class PathfindingService {
     private final Graph graph;
     private final BFS bfs;
@@ -25,9 +22,6 @@ public class PathfindingService {
         this.dijkstra = new Dijkstra(graph);
     }
 
-    /**
-     * Координатаар хамгийн ойр цэг олох
-     */
     public Node findNearestNode(double lat, double lng) {
         Node nearest = null;
         double minDistance = Double.MAX_VALUE;
@@ -43,9 +37,6 @@ public class PathfindingService {
         return nearest;
     }
 
-    /**
-     * BFS алгоритм ашиглан зам олох
-     */
     public PathResponse findPathBFS(double startLat, double startLng, double endLat, double endLng) {
         Node startNode = findNearestNode(startLat, startLng);
         Node endNode = findNearestNode(endLat, endLng);
@@ -64,9 +55,6 @@ public class PathfindingService {
         );
     }
 
-    /**
-     * DFS алгоритм ашиглан зам олох
-     */
     public PathResponse findPathDFS(double startLat, double startLng, double endLat, double endLng) {
         Node startNode = findNearestNode(startLat, startLng);
         Node endNode = findNearestNode(endLat, endLng);
@@ -85,9 +73,6 @@ public class PathfindingService {
         );
     }
 
-    /**
-     * Dijkstra алгоритм ашиглан зам олох
-     */
     public PathResponse findPathDijkstra(double startLat, double startLng, double endLat, double endLng) {
         Node startNode = findNearestNode(startLat, startLng);
         Node endNode = findNearestNode(endLat, endLng);
@@ -106,9 +91,6 @@ public class PathfindingService {
         );
     }
 
-    /**
-     * Гурван алгоритмыг харьцуулах
-     */
     public Map<String, PathResponse> compareAlgorithms(double startLat, double startLng,
                                                        double endLat, double endLng) {
         Map<String, PathResponse> results = new HashMap<>();
@@ -120,9 +102,6 @@ public class PathfindingService {
         return results;
     }
 
-    /**
-     * Хоёр координатын хоорондох зай (Haversine)
-     */
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371;
 

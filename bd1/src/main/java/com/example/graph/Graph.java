@@ -2,9 +2,7 @@ package com.example.graph;
 
 import java.util.*;
 
-/**
- * Графын бүтэц - замын сүлжээг илэрхийлнэ
- */
+
 public class Graph {
     // Adjacency List: цэг -> түүнээс гарах ирмэгүүд
     private final Map<Long, Node> nodes;
@@ -15,29 +13,20 @@ public class Graph {
         this.adjacencyList = new HashMap<>();
     }
 
-    /**
-     * Цэг нэмэх
-     */
     public void addNode(Node node) {
         nodes.put(node.getId(), node);
         adjacencyList.putIfAbsent(node.getId(), new ArrayList<>());
     }
 
-    /**
-     * Ирмэг нэмэх
-     */
     public void addEdge(Edge edge) {
         long fromId = edge.getFrom().getId();
         long toId = edge.getTo().getId();
 
-        // Эхлэх болон дуусах цэгүүдийг графт нэмэх
         addNode(edge.getFrom());
         addNode(edge.getTo());
 
-        // Ирмэг нэмэх
         adjacencyList.get(fromId).add(edge);
 
-        // Хэрэв хоёр чиглэлийн зам бол эсрэг чиглэлийн ирмэг нэмэх
         if (!edge.isOneWay()) {
             Edge reverseEdge = new Edge(
                     edge.getTo(),
@@ -50,30 +39,18 @@ public class Graph {
         }
     }
 
-    /**
-     * ID-аар цэг авах
-     */
     public Node getNode(long id) {
         return nodes.get(id);
     }
 
-    /**
-     * Бүх цэгүүд
-     */
     public Collection<Node> getNodes() {
         return nodes.values();
     }
 
-    /**
-     * Тухайн цэгээс гарах ирмэгүүд
-     */
     public List<Edge> getEdges(long nodeId) {
         return adjacencyList.getOrDefault(nodeId, new ArrayList<>());
     }
 
-    /**
-     * Графын статистик мэдээлэл
-     */
     public void printStats() {
         System.out.println("=== Графын мэдээлэл ===");
         System.out.println("Цэгүүдийн тоо: " + nodes.size());
@@ -84,7 +61,6 @@ public class Graph {
         }
         System.out.println("Ирмэгүүдийн тоо: " + totalEdges);
 
-        // Замын төрлүүдийн статистик
         Map<String, Integer> roadTypeCounts = new HashMap<>();
         for (List<Edge> edges : adjacencyList.values()) {
             for (Edge edge : edges) {
@@ -98,9 +74,6 @@ public class Graph {
                 System.out.println("  " + type + ": " + count));
     }
 
-    /**
-     * Хоёр цэг холбогдсон эсэхийг шалгах
-     */
     public boolean hasEdge(long fromId, long toId) {
         List<Edge> edges = adjacencyList.get(fromId);
         if (edges == null) return false;
@@ -113,9 +86,6 @@ public class Graph {
         return false;
     }
 
-    /**
-     * Графын хэмжээ
-     */
     public int size() {
         return nodes.size();
     }

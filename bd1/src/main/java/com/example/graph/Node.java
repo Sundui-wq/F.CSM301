@@ -2,13 +2,11 @@ package com.example.graph;
 
 import java.util.Objects;
 
-/**
- * Графын орой (vertex) - замын уулзвар цэг
- */
+
 public class Node {
-    private final long id;           // Цэгийн дугаар
-    private final double latitude;   // Өргөрөг
-    private final double longitude;  // Уртраг
+    private final long id;
+    private final double latitude;
+    private final double longitude;
 
     public Node(long id, double latitude, double longitude) {
         this.id = id;
@@ -28,13 +26,8 @@ public class Node {
         return longitude;
     }
 
-    /**
-     * Хоёр цэгийн хоорондох зайг тооцоолох (Haversine томъёо)
-     * @param other Нөгөө цэг
-     * @return Зай (километр)
-     */
     public double distanceTo(Node other) {
-        final int R = 6371; // Дэлхийн радиус (км)
+        final int R = 6371;
 
         double lat1 = Math.toRadians(this.latitude);
         double lat2 = Math.toRadians(other.latitude);

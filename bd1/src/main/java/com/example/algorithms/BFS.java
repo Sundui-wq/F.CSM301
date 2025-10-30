@@ -5,30 +5,16 @@ import com.example.graph.Graph;
 import com.example.graph.Node;
 
 import java.util.*;
-
-/**
- * BFS (Breadth-First Search) - Өргөнөөр эхэлсэн хайлт
- * Хамгийн цөөн алхам (хамгийн цөөн уулзвар) олоход тохиромжтой
- */
 public class BFS {
     private final Graph graph;
 
     public BFS(Graph graph) {
         this.graph = graph;
     }
-
-    /**
-     * BFS ашиглан зам олох
-     * @param startId Эхлэх цэгийн ID
-     * @param endId Дуусах цэгийн ID
-     * @return Зам (цэгүүдийн жагсаалт), олдохгүй бол null
-     */
     public List<Node> findPath(long startId, long endId) {
         if (startId == endId) {
             return Arrays.asList(graph.getNode(startId));
         }
-
-        // Queue ашиглан хайлт
         Queue<Long> queue = new LinkedList<>();
         Set<Long> visited = new HashSet<>();
         Map<Long, Long> parent = new HashMap<>();
@@ -39,12 +25,10 @@ public class BFS {
         while (!queue.isEmpty()) {
             long currentId = queue.poll();
 
-            // Зорилтот цэгт хүрсэн эсэхийг шалгах
             if (currentId == endId) {
                 return reconstructPath(parent, startId, endId);
             }
 
-            // Хөршүүдийг шалгах
             List<Edge> edges = graph.getEdges(currentId);
             for (Edge edge : edges) {
                 long neighborId = edge.getTo().getId();
@@ -57,13 +41,9 @@ public class BFS {
             }
         }
 
-        // Зам олдсонгүй
         return null;
     }
 
-    /**
-     * Замыг сэргээн босгох
-     */
     private List<Node> reconstructPath(Map<Long, Long> parent, long startId, long endId) {
         List<Node> path = new ArrayList<>();
         long current = endId;
@@ -78,9 +58,6 @@ public class BFS {
         return path;
     }
 
-    /**
-     * Замын нийт уртыг тооцоолох
-     */
     public double calculatePathDistance(List<Node> path) {
         if (path == null || path.size() < 2) return 0.0;
 
@@ -102,9 +79,6 @@ public class BFS {
         return totalDistance;
     }
 
-    /**
-     * Алгоритмын статистик
-     */
     public PathResult findPathWithStats(long startId, long endId) {
         long startTime = System.nanoTime();
 
@@ -126,9 +100,6 @@ public class BFS {
         return result;
     }
 
-    /**
-     * Замын үр дүнгийн класс
-     */
     public static class PathResult {
         public List<Node> path;
         public double executionTime; // миллисекунд

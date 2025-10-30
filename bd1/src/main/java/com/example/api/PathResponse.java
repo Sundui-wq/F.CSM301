@@ -5,9 +5,6 @@ import com.example.graph.Node;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * API-ийн хариулт - замын мэдээлэл
- */
 public class PathResponse {
     private boolean success;
     private String message;
@@ -25,9 +22,6 @@ public class PathResponse {
         this.message = message;
     }
 
-    /**
-     * Node жагсаалтаас PathResponse үүсгэх
-     */
     public static PathResponse fromNodeList(List<Node> nodes, String algorithm,
                                             double distance, double time) {
         PathResponse response = new PathResponse();
@@ -49,7 +43,6 @@ public class PathResponse {
         return response;
     }
 
-    // Getters and Setters
     public boolean isSuccess() { return success; }
     public void setSuccess(boolean success) { this.success = success; }
 
@@ -71,9 +64,7 @@ public class PathResponse {
     public double getExecutionTime() { return executionTime; }
     public void setExecutionTime(double executionTime) { this.executionTime = executionTime; }
 
-    /**
-     * Замын цэг (JSON-д хөрвүүлэхэд тохиромжтой)
-     */
+
     public static class PathNode {
         private long id;
         private double lat;

@@ -23,10 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Shapefile файл уншиж график бүтэц үүсгэх
- * ЗАСВАРЛАСАН: Дунд цэгүүдийг ч графикт нэмж, график бүрэн холбогдох болгов
- */
+
 public class ShapefileParser {
     private final Graph graph;
     private final Map<String, Long> coordinateToNodeId;
@@ -37,17 +34,11 @@ public class ShapefileParser {
         this.coordinateToNodeId = new HashMap<>();
     }
 
-    /**
-     * Shapefile файл уншиж график үүсгэх
-     * @param shapefilePath Shapefile файлын зам
-     * @return График бүтэц
-     */
     public Graph parseShapefile(String shapefilePath) throws IOException {
         System.out.println("Shapefile уншиж байна: " + shapefilePath);
 
         File file = new File(shapefilePath);
 
-        // Resources-оос файл уншиж түр файл үүсгэх
         if (!file.exists()) {
             file = extractFromResources(shapefilePath);
         }
@@ -90,18 +81,12 @@ public class ShapefileParser {
         return graph;
     }
 
-    /**
-     * Resources folder-оос файл гаргаж авах
-     */
     private File extractFromResources(String resourcePath) throws IOException {
-        // Зөвхөн файлын нэрийг авах
         String fileName = new File(resourcePath).getName();
         String baseName = fileName.replace(".shp", "");
 
-        // Шаардлагатай файлын өргөтгөлүүд
         String[] extensions = {".shp", ".dbf", ".shx", ".prj", ".cpg"};
 
-        // Түр зам үүсгэх
         Path tempDir = Files.createTempDirectory("shapefile_");
         File shpFile = null;
 
@@ -123,43 +108,32 @@ public class ShapefileParser {
         return shpFile;
     }
 
-    // Улаанбаатарын координатын хязгаар
     private static final double UB_MIN_LAT = 47.7;
     private static final double UB_MAX_LAT = 48.2;
     private static final double UB_MIN_LON = 106.6;
     private static final double UB_MAX_LON = 107.2;
 
-    /**
-     * Координат Улаанбаатарт байгаа эсэхийг шалгах
-     */
     private boolean isInUlaanbaatar(double lat, double lon) {
         return lat >= UB_MIN_LAT && lat <= UB_MAX_LAT &&
                 lon >= UB_MIN_LON && lon <= UB_MAX_LON;
     }
 
-    /**
-     * Feature боловсруулж график руу нэмэх
-     */
     private boolean processFeature(SimpleFeature feature) {
         try {
-            // Геометр авах
             Geometry geometry = (Geometry) feature.getDefaultGeometry();
             if (geometry == null) {
                 return false;
             }
 
-            // Улаанбаатарын хязгаарт байгаа эсэхийг шалгах
             Coordinate centroid = geometry.getCentroid().getCoordinate();
             if (!isInUlaanbaatar(centroid.y, centroid.x)) {
                 return false;
             }
 
-            // Атрибутууд авах
             String fclass = getStringAttribute(feature, "fclass");
             String oneway = getStringAttribute(feature, "oneway");
             Double maxspeed = getDoubleAttribute(feature, "maxspeed");
 
-            // Замын төрөл шүүх
             if (!isValidRoadType(fclass)) {
                 return false;
             }
@@ -168,7 +142,7 @@ public class ShapefileParser {
                     "true".equalsIgnoreCase(oneway) ||
                     "B".equalsIgnoreCase(oneway);
 
-            // Геометрийг боловсруулах
+
             if (geometry instanceof LineString) {
                 processLineString((LineString) geometry, fclass, isOneWay, maxspeed);
                 return true;
@@ -190,32 +164,22 @@ public class ShapefileParser {
         }
     }
 
-    /**
-     * LineString боловсруулж ирмэгүүд үүсгэх
-     * ЗАСВАРЛАСАН: Одоо бүх дунд цэгүүдийг ч графикт нэмнэ
-     */
     private void processLineString(LineString lineString, String roadType,
                                    boolean oneWay, Double maxspeed) {
         Coordinate[] coords = lineString.getCoordinates();
         if (coords.length < 2) return;
 
-        // Coordinate бүрийг node болгон үүсгэж, хоорондох ирмэгүүдийг холбох
         for (int i = 0; i < coords.length - 1; i++) {
             Node fromNode = getOrCreateNode(coords[i]);
             Node toNode = getOrCreateNode(coords[i + 1]);
 
-            // Хоёр цэгийн хоорондох зайг тооцоолох
             double distance = fromNode.distanceTo(toNode);
 
-            // Ирмэг үүсгэх
             Edge edge = new Edge(fromNode, toNode, distance, roadType, oneWay);
             graph.addEdge(edge);
         }
     }
 
-    /**
-     * Координатаас цэг үүсгэх эсвэл авах
-     */
     private Node getOrCreateNode(Coordinate coord) {
         String key = coord.x + "," + coord.y;
 
@@ -231,9 +195,6 @@ public class ShapefileParser {
         return graph.getNode(id);
     }
 
-    /**
-     * Замын төрөл шалгах
-     */
     private boolean isValidRoadType(String fclass) {
         if (fclass == null) return true;
 
@@ -252,9 +213,7 @@ public class ShapefileParser {
                 fc.equals("path");
     }
 
-    /**
-     * String атрибут авах
-     */
+
     private String getStringAttribute(SimpleFeature feature, String attributeName) {
         try {
             Object value = feature.getAttribute(attributeName);
@@ -264,9 +223,7 @@ public class ShapefileParser {
         }
     }
 
-    /**
-     * Double атрибут авах
-     */
+
     private Double getDoubleAttribute(SimpleFeature feature, String attributeName) {
         try {
             Object value = feature.getAttribute(attributeName);

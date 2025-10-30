@@ -6,10 +6,6 @@ import com.example.graph.Node;
 
 import java.util.*;
 
-/**
- * DFS (Depth-First Search) - Гүнээс эхэлсэн хайлт
- * Боломжит бүх зам олоход тохиромжтой
- */
 public class DFS {
     private final Graph graph;
 
@@ -17,9 +13,6 @@ public class DFS {
         this.graph = graph;
     }
 
-    /**
-     * DFS ашиглан нэг зам олох
-     */
     public List<Node> findPath(long startId, long endId) {
         Set<Long> visited = new HashSet<>();
         List<Node> path = new ArrayList<>();
@@ -31,9 +24,6 @@ public class DFS {
         return null;
     }
 
-    /**
-     * DFS рекурсив туслах функц
-     */
     private boolean dfsHelper(long currentId, long endId, Set<Long> visited, List<Node> path) {
         visited.add(currentId);
         path.add(graph.getNode(currentId));
@@ -60,9 +50,6 @@ public class DFS {
         return false;
     }
 
-    /**
-     * Боломжит бүх замыг олох (хязгаарлалттай)
-     */
     public List<List<Node>> findAllPaths(long startId, long endId, int maxPaths) {
         List<List<Node>> allPaths = new ArrayList<>();
         Set<Long> visited = new HashSet<>();
@@ -73,12 +60,9 @@ public class DFS {
         return allPaths;
     }
 
-    /**
-     * Бүх замыг олох туслах функц
-     */
     private void findAllPathsHelper(long currentId, long endId, Set<Long> visited,
                                     List<Node> currentPath, List<List<Node>> allPaths, int maxPaths) {
-        // Хязгаарт хүрсэн эсэхийг шалгах
+
         if (allPaths.size() >= maxPaths) {
             return;
         }
@@ -86,7 +70,6 @@ public class DFS {
         visited.add(currentId);
         currentPath.add(graph.getNode(currentId));
 
-        // Зорилтот цэгт хүрсэн бол замыг хадгалах
         if (currentId == endId) {
             allPaths.add(new ArrayList<>(currentPath));
         } else {
@@ -106,9 +89,6 @@ public class DFS {
         visited.remove(currentId);
     }
 
-    /**
-     * Замын нийт уртыг тооцоолох
-     */
     public double calculatePathDistance(List<Node> path) {
         if (path == null || path.size() < 2) return 0.0;
 
@@ -129,9 +109,6 @@ public class DFS {
         return totalDistance;
     }
 
-    /**
-     * Алгоритмын статистик
-     */
     public PathResult findPathWithStats(long startId, long endId) {
         long startTime = System.nanoTime();
 
@@ -153,9 +130,6 @@ public class DFS {
         return result;
     }
 
-    /**
-     * Бүх замууд олох + статистик
-     */
     public AllPathsResult findAllPathsWithStats(long startId, long endId, int maxPaths) {
         long startTime = System.nanoTime();
 
@@ -172,9 +146,6 @@ public class DFS {
         return result;
     }
 
-    /**
-     * Нэг замын үр дүн
-     */
     public static class PathResult {
         public List<Node> path;
         public double executionTime;
@@ -194,9 +165,6 @@ public class DFS {
         }
     }
 
-    /**
-     * Олон замын үр дүн
-     */
     public static class AllPathsResult {
         public List<List<Node>> allPaths;
         public double executionTime;

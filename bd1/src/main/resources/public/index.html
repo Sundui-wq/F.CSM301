@@ -5,21 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Улаанбаатарын Замын Хайлт</title>
 
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="container">
-    <!-- Header -->
     <header>
         <h1>🗺️ Улаанбаатарын Замын Хайлт</h1>
         <p>Алгоритмуудыг харьцуулж, хамгийн тохиромжтой замыг олоорой</p>
     </header>
 
-    <!-- Control Panel -->
     <div class="controls">
         <div class="control-group">
             <h3>Алгоритм сонгох:</h3>
@@ -60,26 +56,21 @@
         </div>
     </div>
 
-    <!-- Map Container -->
     <div id="map"></div>
 
-    <!-- Results Panel -->
     <div id="results" class="results-panel hidden">
         <h3>Үр дүн</h3>
         <div id="results-content"></div>
     </div>
 
-    <!-- Loading Indicator -->
     <div id="loading" class="loading hidden">
         <div class="spinner"></div>
         <p>Зам тооцоолж байна...</p>
     </div>
 </div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<!-- Custom JS -->
 <script src="js/api.js"></script>
 <script src="js/map.js"></script>
 </body>

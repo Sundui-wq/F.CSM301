@@ -6,10 +6,6 @@ import com.example.graph.Node;
 
 import java.util.*;
 
-/**
- * Dijkstra Algorithm - Дейкстрагийн алгоритм
- * Хамгийн богино зам (хамгийн бага жинтэй) олоход тохиромжтой
- */
 public class Dijkstra {
     private final Graph graph;
 
@@ -17,42 +13,29 @@ public class Dijkstra {
         this.graph = graph;
     }
 
-    /**
-     * Dijkstra ашиглан хамгийн богино зам олох
-     */
     public List<Node> findPath(long startId, long endId) {
-        // Зай хадгалах
         Map<Long, Double> distances = new HashMap<>();
-        // Өмнөх цэг хадгалах
         Map<Long, Long> previous = new HashMap<>();
-        // Шалгасан цэгүүд
         Set<Long> visited = new HashSet<>();
-        // Priority Queue - хамгийн бага зайтай цэгийг авах
         PriorityQueue<NodeDistance> pq = new PriorityQueue<>(
                 Comparator.comparingDouble(nd -> nd.distance)
         );
-
-        // Эхлэх цэгийн зайг 0 болгох
         distances.put(startId, 0.0);
         pq.offer(new NodeDistance(startId, 0.0));
 
         while (!pq.isEmpty()) {
             NodeDistance current = pq.poll();
             long currentId = current.nodeId;
-
-            // Аль хэдийн шалгасан бол алгасах
             if (visited.contains(currentId)) {
                 continue;
             }
 
             visited.add(currentId);
 
-            // Зорилтот цэгт хүрсэн эсэхийг шалгах
             if (currentId == endId) {
                 return reconstructPath(previous, startId, endId);
             }
 
-            // Хөршүүдийг шалгах
             List<Edge> edges = graph.getEdges(currentId);
             for (Edge edge : edges) {
                 long neighborId = edge.getTo().getId();
@@ -61,11 +44,9 @@ public class Dijkstra {
                     continue;
                 }
 
-                // Шинэ зайг тооцоолох
                 double newDistance = distances.getOrDefault(currentId, Double.MAX_VALUE)
                         + edge.getWeight();
 
-                // Хэрэв шинэ зам богино бол шинэчлэх
                 if (newDistance < distances.getOrDefault(neighborId, Double.MAX_VALUE)) {
                     distances.put(neighborId, newDistance);
                     previous.put(neighborId, currentId);
@@ -74,13 +55,10 @@ public class Dijkstra {
             }
         }
 
-        // Зам олдсонгүй
+
         return null;
     }
 
-    /**
-     * Замыг сэргээн босгох
-     */
     private List<Node> reconstructPath(Map<Long, Long> previous, long startId, long endId) {
         List<Node> path = new ArrayList<>();
         long current = endId;
@@ -89,7 +67,7 @@ public class Dijkstra {
             path.add(graph.getNode(current));
 
             if (!previous.containsKey(current)) {
-                return null; // Зам тасарсан
+                return null;
             }
 
             current = previous.get(current);
@@ -100,9 +78,6 @@ public class Dijkstra {
         return path;
     }
 
-    /**
-     * Замын нийт уртыг тооцоолох
-     */
     public double calculatePathDistance(List<Node> path) {
         if (path == null || path.size() < 2) return 0.0;
 
@@ -123,9 +98,6 @@ public class Dijkstra {
         return totalDistance;
     }
 
-    /**
-     * Алгоритмын статистик
-     */
     public PathResult findPathWithStats(long startId, long endId) {
         long startTime = System.nanoTime();
 
@@ -147,9 +119,6 @@ public class Dijkstra {
         return result;
     }
 
-    /**
-     * Priority Queue-д ашиглах класс
-     */
     private static class NodeDistance {
         long nodeId;
         double distance;
@@ -160,9 +129,6 @@ public class Dijkstra {
         }
     }
 
-    /**
-     * Замын үр дүнгийн класс
-     */
     public static class PathResult {
         public List<Node> path;
         public double executionTime;

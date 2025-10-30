@@ -1,14 +1,12 @@
 package com.example.graph;
 
-/**
- * Графын ирмэг (edge) - хоёр цэгийн хоорондох зам
- */
+
 public class Edge {
-    private final Node from;        // Эхлэх цэг
-    private final Node to;          // Дуусах цэг
-    private final double weight;    // Жин (замын урт км-ээр)
-    private final String roadType;  // Замын төрөл
-    private final boolean oneWay;   // Нэг чиглэлийн эсэх
+    private final Node from;
+    private final Node to;
+    private final double weight;
+    private final String roadType;
+    private final boolean oneWay;
 
     public Edge(Node from, Node to, double weight, String roadType, boolean oneWay) {
         this.from = from;

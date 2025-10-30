@@ -10,10 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * REST API Controller
- * ЗАСВАРЛАСАН: /api/graph/nodes endpoint нэмэв - бүх цэгүүдийг буцаана
- */
+
 public class PathfindingController {
     private final PathfindingService service;
     private final Gson gson;
@@ -23,27 +20,22 @@ public class PathfindingController {
         this.gson = new Gson();
     }
 
-    /**
-     * Javalin сервер эхлүүлэх
-     */
+
     public void start(int port) {
         Javalin app = Javalin.create(config -> {
-            // CORS тохируулах
             config.plugins.enableCors(cors -> {
                 cors.add(it -> {
                     it.anyHost();
                 });
             });
 
-            // Static файлууд үйлчлэх
             config.staticFiles.add("/public");
         }).start(port);
 
-        // API endpoints
         app.get("/", this::home);
         app.get("/api/health", this::health);
         app.get("/api/graph/stats", this::graphStats);
-        app.get("/api/graph/nodes", this::getAllNodes); // ШИНЭ ENDPOINT
+        app.get("/api/graph/nodes", this::getAllNodes);
         app.post("/api/path/bfs", this::findPathBFS);
         app.post("/api/path/dfs", this::findPathDFS);
         app.post("/api/path/dijkstra", this::findPathDijkstra);
@@ -53,16 +45,10 @@ public class PathfindingController {
         System.out.println("✓ API documentation: http://localhost:" + port + "/api/health");
     }
 
-    /**
-     * Үндсэн хуудас
-     */
     private void home(Context ctx) {
         ctx.redirect("/index.html");
     }
 
-    /**
-     * Сервер эрүүл байгаа эсэхийг шалгах
-     */
     private void health(Context ctx) {
         Map<String, Object> response = Map.of(
                 "status", "OK",
@@ -72,9 +58,6 @@ public class PathfindingController {
         ctx.json(response);
     }
 
-    /**
-     * График статистик
-     */
     private void graphStats(Context ctx) {
         ctx.json(Map.of(
                 "nodes", service.getGraph().size(),
@@ -82,14 +65,9 @@ public class PathfindingController {
         ));
     }
 
-    /**
-     * ШИНЭ: Бүх Node-уудыг буцаах endpoint
-     * Энэ нь frontend дээр бүх цэгүүдийг газрын зураг дээр харуулах боломж олгоно
-     */
     private void getAllNodes(Context ctx) {
         Collection<Node> allNodes = service.getGraph().getNodes();
 
-        // Node -> SimpleNode (JSON serialization-д тохиромжтой)
         List<SimpleNode> simpleNodes = allNodes.stream()
                 .map(node -> new SimpleNode(node.getId(), node.getLatitude(), node.getLongitude()))
                 .collect(Collectors.toList());
@@ -103,9 +81,6 @@ public class PathfindingController {
         ctx.json(response);
     }
 
-    /**
-     * BFS зам олох
-     */
     private void findPathBFS(Context ctx) {
         try {
             PathRequest request = gson.fromJson(ctx.body(), PathRequest.class);
@@ -119,9 +94,6 @@ public class PathfindingController {
         }
     }
 
-    /**
-     * DFS зам олох
-     */
     private void findPathDFS(Context ctx) {
         try {
             PathRequest request = gson.fromJson(ctx.body(), PathRequest.class);
@@ -135,9 +107,6 @@ public class PathfindingController {
         }
     }
 
-    /**
-     * Dijkstra зам олох
-     */
     private void findPathDijkstra(Context ctx) {
         try {
             PathRequest request = gson.fromJson(ctx.body(), PathRequest.class);
@@ -151,9 +120,6 @@ public class PathfindingController {
         }
     }
 
-    /**
-     * Гурван алгоритмыг харьцуулах
-     */
     private void compareAlgorithms(Context ctx) {
         try {
             PathRequest request = gson.fromJson(ctx.body(), PathRequest.class);
@@ -167,9 +133,6 @@ public class PathfindingController {
         }
     }
 
-    /**
-     * API хүсэлтийн класс
-     */
     private static class PathRequest {
         double startLat;
         double startLng;
@@ -177,9 +140,6 @@ public class PathfindingController {
         double endLng;
     }
 
-    /**
-     * JSON-д хөрвүүлэхэд тохиромжтой энгийн Node класс
-     */
     private static class SimpleNode {
         private long id;
         private double lat;
